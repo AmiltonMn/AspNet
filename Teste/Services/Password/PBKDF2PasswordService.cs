@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace Server.Services.Password;
+
+using Microsoft.AspNetCore.Identity;
 
 public class PBKDF2PasswordService : IPasswordService
 {
@@ -13,7 +13,6 @@ public class PBKDF2PasswordService : IPasswordService
     public bool Verify(string password, string hashedPass)
     {
         var hash = hasher.VerifyHashedPassword(password, hashedPass, password);
-
         return hash == PasswordVerificationResult.Success;
     }
 } 

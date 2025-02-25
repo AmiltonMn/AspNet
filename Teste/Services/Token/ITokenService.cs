@@ -1,6 +1,6 @@
-using Server.Entities;
-
 namespace Server.Services.Token;
+
+using Server.Entities;
 
 public interface ITokenService 
 {

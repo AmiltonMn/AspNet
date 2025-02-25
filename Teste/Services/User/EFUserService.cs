@@ -2,7 +2,9 @@ namespace Server.Services.User;
 
 using Models;
 using Entities;
+
 using Server.Services.Password;
+
 using Microsoft.EntityFrameworkCore;
 
 public class EFUserService(

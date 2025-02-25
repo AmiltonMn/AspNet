@@ -1,11 +1,14 @@
+namespace Server.Controllers;
+
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using Server.Configuration;
 using Server.Models;
 using Server.Services.Token;
 using Server.Services.User;
-
-namespace Server.Controllers;
 
 [Route("/user")]
 [ApiController]
@@ -25,15 +28,19 @@ public class UserController(
     }
 
     [Authorize]
-    [HttpGet("/invitation")]
+    [HttpGet("invitation")]
     public IActionResult GetInvitationURL() 
     {
-        var userId = Guid.Empty;
+        var userId = User.GetClaimId();
+
+        if (userId is null)
+            return Unauthorized();
+        
         var localhost = config.GetClientUrl();
         return Ok($"{localhost}/invitation/{userId}");
     }
 
-    [HttpPost("/invitation/{invite}")]
+    [HttpPost("invitation/{invite}")]
     public async Task<IActionResult> CreateUserWithInvite([FromBody]AccountData accountaData, [FromRoute]Guid invite) 
     {
         await service.CreateUser(accountaData, invite);
@@ -41,7 +48,7 @@ public class UserController(
         return Ok("User created successfully!");
     }
 
-    [HttpPost("/auth")]
+    [HttpPost("auth")]
     public async Task<IActionResult> Login([FromBody]LoginData LoginData) 
     {
         var user = await service.Authenticate(LoginData);

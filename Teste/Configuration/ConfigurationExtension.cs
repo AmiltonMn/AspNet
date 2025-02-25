@@ -1,7 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.IdentityModel.Tokens;
+namespace Server.Configuration;
 
-namespace Server;
+using Microsoft.IdentityModel.Tokens;
 
 public static class ConfigurationExtension
 {

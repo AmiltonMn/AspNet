@@ -10,7 +10,7 @@ public class ParaLancheDbContext(DbContextOptions<ParaLancheDbContext> options) 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<ApplicationUser>()
-            .HasMany( e => e.InvitedUsers )
+            .HasMany( e => e.InvitedUsers)
             .WithOne(e => e.InvitedBy)
             .HasForeignKey(e => e.InvitedByUserId)
             .OnDelete(DeleteBehavior.SetNull);

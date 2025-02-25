@@ -2,7 +2,7 @@ namespace Server.Entities;
 
 public class ApplicationUser
 {
-    public Guid id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public required string Name { get; set; }
 
@@ -12,7 +12,7 @@ public class ApplicationUser
 
     public ApplicationUser? InvitedBy { get; set; }
 
-    public Guid InvitedByUserId { get; set; }
+    public Guid? InvitedByUserId { get; set; }
 
     public ICollection<ApplicationUser> InvitedUsers { get; set; } = [];
 }
