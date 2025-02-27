@@ -27,9 +27,15 @@ public class ParaLancheDbContext(DbContextOptions<ParaLancheDbContext> options) 
             .HasForeignKey(e => e.InvitedByUserId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.Entity<Meal>()
-            .HasMany(e => e.Ingredients)
-            .WithMany();
+        builder.Entity<Order>()
+            .HasMany(e => e.Additional)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("OrderAdditionalIngredients"));
+
+        builder.Entity<Order>()
+            .HasMany(e => e.RemovedIngredients)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("OrderRemovedIngredients"));
 
         builder.Entity<Order>()
             .HasOne(e => e.OrderedMeal)
@@ -50,5 +56,9 @@ public class ParaLancheDbContext(DbContextOptions<ParaLancheDbContext> options) 
         builder.Entity<Review>()
             .HasOne(e => e.User)
             .WithMany();
+
+        builder.Entity<FinalOrder>()
+            .HasMany(e => e.Orders)
+            .WithOne();
     }
 }

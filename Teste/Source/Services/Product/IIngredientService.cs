@@ -7,11 +7,11 @@ public interface IIngredientService
 {
     Task<Ingredient> NewIngredient(IngredientData data);
 
-    Task<Ingredient> GetIngredients();
+    Task<ICollection<Ingredient>?> GetIngredients();
 
-    Task<Ingredient> GetIngredientById(Guid id);
+    Task<Ingredient?> GetIngredientById(Guid id);
 
-    Task<Ingredient> UpdateIngredient(Guid id);
+    Task<Ingredient?> UpdateIngredient(UpdateIngredientData data, Guid id);
 
-    Task<Ingredient> DeleteIngredient(Guid id);
+    Boolean DeleteIngredient(Guid id);
 }

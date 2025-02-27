@@ -8,9 +8,7 @@ public class Meal
 
     public required float Value { get; set; }
 
-    public required ICollection<Ingredient> Ingredients { get; set; }
-
-    public ICollection<Ingredient>? Additional { get; set; }
+    public required ICollection<Guid> Ingredients { get; set; }
 
     public string? Description { get; set; }
 

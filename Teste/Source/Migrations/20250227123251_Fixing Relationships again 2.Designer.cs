@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Source.Entities;
 
@@ -11,9 +12,11 @@ using Server.Source.Entities;
 namespace Server.Migrations
 {
     [DbContext(typeof(ParaLancheDbContext))]
-    partial class ParaLancheDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250227123251_Fixing Relationships again 2")]
+    partial class FixingRelationshipsagain2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +24,6 @@ namespace Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("IngredientOrder", b =>
-                {
-                    b.Property<Guid>("AdditionalId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("AdditionalId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderAdditionalIngredients", (string)null);
-                });
-
-            modelBuilder.Entity("IngredientOrder1", b =>
-                {
-                    b.Property<Guid>("Order1Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RemovedIngredientsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Order1Id", "RemovedIngredientsId");
-
-                    b.HasIndex("RemovedIngredientsId");
-
-                    b.ToTable("OrderRemovedIngredients", (string)null);
-                });
 
             modelBuilder.Entity("Server.Source.Entities.ApplicationUser", b =>
                 {
@@ -136,14 +109,34 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("MealId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MealId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("Value")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.HasIndex("MealId1");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("Ingredients");
                 });
@@ -155,10 +148,6 @@ namespace Server.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.PrimitiveCollection<string>("Ingredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -240,36 +229,6 @@ namespace Server.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("IngredientOrder", b =>
-                {
-                    b.HasOne("Server.Source.Entities.Orders.Ingredient", null)
-                        .WithMany()
-                        .HasForeignKey("AdditionalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Server.Source.Entities.Orders.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("IngredientOrder1", b =>
-                {
-                    b.HasOne("Server.Source.Entities.Orders.Order", null)
-                        .WithMany()
-                        .HasForeignKey("Order1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Server.Source.Entities.Orders.Ingredient", null)
-                        .WithMany()
-                        .HasForeignKey("RemovedIngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Server.Source.Entities.ApplicationUser", b =>
                 {
                     b.HasOne("Server.Source.Entities.ApplicationUser", "InvitedBy")
@@ -289,6 +248,25 @@ namespace Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("Server.Source.Entities.Orders.Ingredient", b =>
+                {
+                    b.HasOne("Server.Source.Entities.Orders.Meal", null)
+                        .WithMany("Additional")
+                        .HasForeignKey("MealId");
+
+                    b.HasOne("Server.Source.Entities.Orders.Meal", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("MealId1");
+
+                    b.HasOne("Server.Source.Entities.Orders.Order", null)
+                        .WithMany("Additional")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Server.Source.Entities.Orders.Order", null)
+                        .WithMany("RemovedIngredients")
+                        .HasForeignKey("OrderId1");
                 });
 
             modelBuilder.Entity("Server.Source.Entities.Orders.Order", b =>
@@ -341,6 +319,20 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Source.Entities.Orders.FinalOrder", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Server.Source.Entities.Orders.Meal", b =>
+                {
+                    b.Navigation("Additional");
+
+                    b.Navigation("Ingredients");
+                });
+
+            modelBuilder.Entity("Server.Source.Entities.Orders.Order", b =>
+                {
+                    b.Navigation("Additional");
+
+                    b.Navigation("RemovedIngredients");
                 });
 #pragma warning restore 612, 618
         }

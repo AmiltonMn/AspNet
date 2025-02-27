@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Server.Source.Entities;
 using Server.Source.Entities.Orders;
 using Server.Source.Models.Product;
@@ -21,24 +23,62 @@ public class EFIngredientService(
         return ingredient;
     }
 
-    public Task<Ingredient> DeleteIngredient(Guid id)
+    public Boolean DeleteIngredient(Guid id)
     {
-        throw new NotImplementedException();
+        var ingredients =
+            from ing in ctx.Ingredients
+            where ing.Id == id
+            select ing;
+        
+        var ingredient = ingredients.FirstOrDefault();
+
+        if (ingredient is null)
+            return false;
+
+        ctx.Remove(ingredient);
+        ctx.SaveChangesAsync();
+
+        return true;
     }
 
-    public Task<Ingredient> GetIngredientById(Guid id)
+    public async Task<Ingredient?> GetIngredientById(Guid id)
     {
-        throw new NotImplementedException();
+        var ingredients =
+            from ing in ctx.Ingredients
+            where ing.Id == id
+            select ing;
+        
+        return await ingredients.FirstOrDefaultAsync() switch
+        {
+            Ingredient ingredient when ingredient is not null => ingredient,
+            _ => null
+        };
     }
 
-    public Task<Ingredient> GetIngredients()
+    public async Task<ICollection<Ingredient>?> GetIngredients()
     {
-        throw new NotImplementedException();
+        var getIngredients = 
+            from ing in ctx.Ingredients
+            select ing;
+
+        return await getIngredients.ToListAsync();
     }
 
-
-    public Task<Ingredient> UpdateIngredient(Guid id)
+    public async Task<Ingredient?> UpdateIngredient(UpdateIngredientData data, Guid id)
     {
-        throw new NotImplementedException();
+        var ingredients = 
+            from ing in ctx.Ingredients
+            where ing.Id == id
+            select ing;
+
+        var ingredient = await ingredients.FirstOrDefaultAsync();
+        
+        if (ingredient is null)
+            return null;
+
+        ingredient.Value = data.Value is not null ? (float)data.Value : ingredient.Value;
+        ingredient.Name = data.Name is not null ? data.Name : ingredient.Name;        
+
+        return ingredient;
     }
 }
