@@ -1,4 +1,4 @@
-namespace Server.Source.Models.Product;
+namespace Server.Source.Models.Ingredient;
 
 public record UpdateIngredientData (
     string? Name,

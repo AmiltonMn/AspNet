@@ -1,11 +1,8 @@
-namespace Server.Source.Controllers;
+namespace Server.Source.Controllers.ProductControllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Server.Source.Services.Product;
-using Server.Source.Models.Product;
-using Microsoft.Identity.Client;
-using Server.Source.Entities.Orders;
-using Azure.Messaging;
+using Server.Source.Services.Ingredient;
+using Server.Source.Models.Ingredient;
 
 [Route("/ingredient")]
 [ApiController]
@@ -27,7 +24,9 @@ public class IngredientController(
     {
         var res = service.DeleteIngredient(id);
 
-        if (!res)
+        Console.WriteLine(res.Result);
+
+        if (!res.Result)
             return NotFound("Could not found this ingredient!");
 
         return Ok("Ingredient deleted successfully!");

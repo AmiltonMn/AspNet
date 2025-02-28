@@ -1,10 +1,9 @@
-using System.Threading.Tasks;
+namespace Server.Source.Services.Ingredient;
+
 using Microsoft.EntityFrameworkCore;
 using Server.Source.Entities;
 using Server.Source.Entities.Orders;
-using Server.Source.Models.Product;
-
-namespace Server.Source.Services.Product;
+using Server.Source.Models.Ingredient;
 
 public class EFIngredientService(
     ParaLancheDbContext ctx
@@ -23,7 +22,7 @@ public class EFIngredientService(
         return ingredient;
     }
 
-    public Boolean DeleteIngredient(Guid id)
+    public async Task<bool> DeleteIngredient(Guid id)
     {
         var ingredients =
             from ing in ctx.Ingredients
@@ -36,7 +35,7 @@ public class EFIngredientService(
             return false;
 
         ctx.Remove(ingredient);
-        ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync();
 
         return true;
     }

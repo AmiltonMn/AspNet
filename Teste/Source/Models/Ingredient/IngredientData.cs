@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+namespace Server.Source.Models.Ingredient;
 
-namespace Server.Source.Models.Product;
+using System.ComponentModel.DataAnnotations;
 
 public record IngredientData (
     [Required]

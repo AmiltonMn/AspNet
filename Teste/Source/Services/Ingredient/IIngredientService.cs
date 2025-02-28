@@ -1,7 +1,7 @@
-namespace Server.Source.Services.Product;
+namespace Server.Source.Services.Ingredient;
 
 using Server.Source.Entities.Orders;
-using Server.Source.Models.Product;
+using Server.Source.Models.Ingredient;
 
 public interface IIngredientService
 {
@@ -13,5 +13,5 @@ public interface IIngredientService
 
     Task<Ingredient?> UpdateIngredient(UpdateIngredientData data, Guid id);
 
-    Boolean DeleteIngredient(Guid id);
+    Task<bool> DeleteIngredient(Guid id);
 }
